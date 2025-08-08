@@ -16,9 +16,9 @@ const createUser = asyncHandler(async (req, res) => {
   const roleCek = await prisma.user.findUnique({
     where: { clerkId: clerkId },
   });
-  if (roleCek && (roleCek.role === "ADMIN" || roleCek.role === "USER")) {
-    return res.json({
-      message: `anda sudah terdaftar dengan role ${roleCek.role}`,
+  if (roleCek && (roleCek.role === "admin" || roleCek.role === "user")) {
+    return res.status(400).json({
+      message: `Anda sudah terdaftar dengan role ${roleCek.role}`,
     });
   }
 
@@ -49,7 +49,7 @@ const createUser = asyncHandler(async (req, res) => {
     data: validatedData,
   });
 
-  //contoh untuk mengirim email 
+  //contoh untuk mengirim email
   const info = await transporter.sendMail({
     from: process.env.GOOGLE_APP_ACCOUNT,
     to: user.email,
