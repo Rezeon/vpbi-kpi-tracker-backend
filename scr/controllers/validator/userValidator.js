@@ -2,7 +2,7 @@ const { z } = require('zod');
 
 const userSchema = z.object({
   clerkId: z.string(),
-  role: z.enum(["USER", "ADMIN"], {
+  role: z.enum(["user", "admin"], {
     errorMap: () => ({ message: "Role harus berupa USER atau ADMIN." })
   }),
   karyawanId: z.int(),

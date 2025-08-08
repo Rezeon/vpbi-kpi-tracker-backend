@@ -1,7 +1,7 @@
 const asyncHandler = require("express-async-handler");
 const prisma = require("../config/prisma");
 const { userSchema } = require("./validator/userValidator");
-
+const { transporter } = require("../utils/nodeMailer");
 //-> (req) <-! secara global sudah menyimpan clerkid, username , email kecuali role
 
 // contoh untuk controller project magang crud kalo kurang tau bisa tanya rheyno
@@ -13,6 +13,15 @@ const createUser = asyncHandler(async (req, res) => {
     return res.status(400).json({ error: "Role wajib diisi" });
   }
 
+  const roleCek = await prisma.user.findUnique({
+    where: { clerkId: clerkId },
+  });
+  if (roleCek && (roleCek.role === "ADMIN" || roleCek.role === "USER")) {
+    return res.json({
+      message: `anda sudah terdaftar dengan role ${roleCek.role}`,
+    });
+  }
+
   //jika ingin mengambil validasi tertentu dari userValidator(dicek dulu ada apa saja)
   //const validateDataa = userSchema.pick({
   //  role: true, # ambil bagian yang ingin di validate
@@ -22,16 +31,33 @@ const createUser = asyncHandler(async (req, res) => {
   //  username
   //})
 
-  const validatedData = userSchema.parse({
-    role,
-    username,
-    email,
-    clerkId,
-  });
+  const validatedData = userSchema
+    .pick({
+      role: true,
+      username: true,
+      email: true,
+      clerkId: true,
+    })
+    .parse({
+      role,
+      username,
+      email,
+      clerkId,
+    });
 
   const user = await prisma.user.create({
     data: validatedData,
   });
+
+  //contoh untuk mengirim email 
+  const info = await transporter.sendMail({
+    from: process.env.GOOGLE_APP_ACCOUNT,
+    to: user.email,
+    subject: "Selamat Anda Sudah bergabung dengan KPI",
+    text: "dengan ini anda sudah bergabung dengan anggota kami Mohon selesaikan tugas dengan tepat waktu",
+    html: "<b>Semangatt</b>",
+  });
+  console.log("Message sent:", info.messageId);
 
   return res.status(201).json(user);
 });
@@ -85,7 +111,7 @@ const deleteUser = asyncHandler(async (req, res) => {
   if (deleted.count === 0) {
     return res.status(404).json({ error: "User tidak ditemukan" });
   }
-  
+
   return res.status(200).json(deleteUser);
 });
 
