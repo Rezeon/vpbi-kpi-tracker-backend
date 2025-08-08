@@ -1,0 +1,126 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          Int            @id @default(autoincrement())
+  clerkId     String         @unique
+  email       String
+  username    String
+  role        Role
+  karyawan    Karyawan?      @relation("UserToKaryawan")
+  karyawanId  Int?           @unique
+  createdAt   DateTime       @default(now())
+  notifikasi  Notifikasi[]
+  resetTokens ResetToken[]
+  penilaian   PenilaianKPI[] @relation("DibuatOleh")
+}
+
+model Karyawan {
+  id           Int            @id @default(autoincrement())
+  userId       Int?           @unique
+  user         User?          @relation("UserToKaryawan", fields: [userId], references: [id])
+  nama         String
+  email        String         @unique
+  posisi       String
+  divisi       Divisi         @relation(fields: [divisiId], references: [id])
+  divisiId     Int
+  tanggalMasuk DateTime
+  createdAt    DateTime       @default(now())
+  penilaian    PenilaianKPI[]
+  laporan      LaporanKPI[]
+}
+
+model Divisi {
+  id        Int        @id @default(autoincrement())
+  nama      String
+  deskripsi String
+  createdAt DateTime   @default(now())
+  karyawan  Karyawan[]
+}
+
+model MatriksKPI {
+  id        Int               @id @default(autoincrement())
+  namaKPI   String
+  deskripsi String
+  bobot     Float
+  createdAt DateTime          @default(now())
+  detail    DetailPenilaian[]
+}
+
+model PenilaianKPI {
+  id           Int               @id @default(autoincrement())
+  karyawan     Karyawan          @relation(fields: [karyawanId], references: [id])
+  karyawanId   Int
+  bulan        String
+  totalSkor    Float
+  dibuatOleh   User              @relation("DibuatOleh", fields: [dibuatOlehId], references: [id])
+  dibuatOlehId Int
+  createdAt    DateTime          @default(now())
+  detail       DetailPenilaian[]
+}
+
+model DetailPenilaian {
+  id          Int          @id @default(autoincrement())
+  penilaian   PenilaianKPI @relation(fields: [penilaianId], references: [id])
+  penilaianId Int
+  matriks     MatriksKPI   @relation(fields: [matriksId], references: [id])
+  matriksId   Int
+  nilai       Float
+}
+
+model LaporanKPI {
+  id         Int      @id @default(autoincrement())
+  karyawan   Karyawan @relation(fields: [karyawanId], references: [id])
+  karyawanId Int
+  bulan      String
+  rataRata   Float
+  ringkasan  String?
+}
+
+model Notifikasi {
+  id        Int         @id @default(autoincrement())
+  user      User        @relation(fields: [userId], references: [id])
+  userId    Int
+  judul     String
+  pesan     String
+  tipe      NotifType
+  status    NotifStatus
+  createdAt DateTime    @default(now())
+}
+
+model ResetToken {
+  id        Int      @id @default(autoincrement())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int
+  token     String   @unique
+  expiresAt DateTime
+  used      Boolean  @default(false)
+}
+
+enum Role {
+  admin
+  user
+}
+
+enum NotifType {
+  in_app
+  email
+}
+
+enum NotifStatus {
+  terkirim
+  gagal
+  terbaca
+}
