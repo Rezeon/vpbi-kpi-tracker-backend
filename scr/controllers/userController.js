@@ -1,6 +1,6 @@
 const asyncHandler = require("express-async-handler");
 const prisma = require("../config/prisma");
-const { userSchema } = require("./validator/userValidator");
+const { userSchema } = require("./validator/Validator");
 const { transporter } = require("../utils/nodeMailer");
 //-> (req) <-! secara global sudah menyimpan clerkid, username , email kecuali role
 
