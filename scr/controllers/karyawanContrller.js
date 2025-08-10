@@ -4,8 +4,7 @@ const { karyawanSchema } = require("./validator/Validator");
 const { transporter } = require("../utils/nodeMailer");
 
 const addKaryawan = asyncHandler(async (req, res) => {
-  const { userId, nama, email, posisi, divisiId, tanggalMasuk } = req.body;
-  const validateData = karyawanSchema
+  const validateResult = karyawanSchema
     .pick({
       userId: true,
       nama: true,
@@ -14,26 +13,28 @@ const addKaryawan = asyncHandler(async (req, res) => {
       divisiId: true,
       tanggalMasuk: true,
     })
-    .parse({
-      userId,
-      nama,
-      email,
-      posisi,
-      divisiId,
-      tanggalMasuk,
+    .safeParse(req.body);
+
+  if (!validateResult.success) {
+    return res.status(400).json({
+      errors: validateResult.error.errors.map((e) => e.message),
     });
+  }
 
   const karyawan = await prisma.karyawan.create({
-    data: validateData,
+    data: validateResult.data,
   });
 
-  const info = await transporter.sendMail({
-    from: process.env.GOOGLE_APP_ACCOUNT,
-    to: karyawan.email,
-    subject: "Selamat anda telah menjadi karyawan di KPI",
-    text: "karyawan KPI",
-    html: "<b>dengan ini andan telah menjadi karyawan di kpi</b>",
-  });
+  try {
+    await transporter.sendMail({
+      from: process.env.GOOGLE_APP_ACCOUNT,
+      to: karyawan.email,
+      subject: "Selamat anda telah menjadi karyawan di KPI",
+      html: "<b>Dengan ini anda telah menjadi karyawan di KPI</b>",
+    });
+  } catch (error) {
+    console.error("Gagal kirim email:", error.message);
+  }
 
   return res.status(201).json(karyawan);
 });
@@ -45,9 +46,10 @@ const getAllKaryawan = asyncHandler(async (req, res) => {
 
 const getbyId = asyncHandler(async (req, res) => {
   const { id } = req.body;
+
   const karyawanId = await prisma.karyawan.findUnique({
-    where: { id: id },
-    include: {
+    where: { id: Number(id) },
+    select: {
       nama: true,
       email: true,
       posisi: true,
@@ -56,43 +58,50 @@ const getbyId = asyncHandler(async (req, res) => {
     },
   });
 
+  if (!karyawanId) {
+    return res.status(404).json({ error: "Karyawan tidak ditemukan" });
+  }
+
   return res.status(200).json(karyawanId);
 });
 
 const updateKaryawan = asyncHandler(async (req, res) => {
-  const { id, nama, email, posisi, divisiId } = req.body;
+  const { id, ...data } = req.body;
 
-  const validateData = karyawanSchema.partial().parse({
-    nama,
-    email,
-    posisi,
-    divisiId,
+  const validateResult = karyawanSchema.partial().safeParse(data);
+  if (!validateResult.success) {
+    return res.status(400).json({
+      errors: validateResult.error.errors.map((e) => e.message),
+    });
+  }
+
+  const updated = await prisma.karyawan.update({
+    where: { id: Number(id) },
+    data: validateResult.data,
   });
 
-  const updateKaryawan = await prisma.karyawan.update({
-    where: { id: id },
-    data: validateData,
-  });
-
-  return res.status(200).json(updateKaryawan);
+  return res.status(200).json(updated);
 });
 
 const deleteKaryawan = asyncHandler(async (req, res) => {
   const { id } = req.body;
 
-  const deleteKaryawan = await prisma.karyawan.delete({ where: { id: id } });
+  const existing = await prisma.karyawan.findUnique({
+    where: { id: Number(id) },
+  });
 
-  if (deleted.count === 0) {
-    return res.status(400).json({ error: "Karyawan tidak ditemukan" });
+  if (!existing) {
+    return res.status(404).json({ error: "Karyawan tidak ditemukan" });
   }
 
-  return res.status(200).json(deleteKaryawan);
+  await prisma.karyawan.delete({ where: { id: Number(id) } });
+  return res.status(200).json({ message: "Karyawan berhasil dihapus" });
 });
 
-module.exports = { 
-    addKaryawan,
-    getAllKaryawan,
-    getbyId,
-    updateKaryawan,
-    deleteKaryawan
-}
+module.exports = {
+  addKaryawan,
+  getAllKaryawan,
+  getbyId,
+  updateKaryawan,
+  deleteKaryawan,
+};
