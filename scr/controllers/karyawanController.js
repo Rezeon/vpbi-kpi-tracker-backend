@@ -40,21 +40,31 @@ const addKaryawan = asyncHandler(async (req, res) => {
 });
 
 const getAllKaryawan = asyncHandler(async (req, res) => {
-  const karyawan = await prisma.karyawan.findMany();
+  const karyawan = await prisma.karyawan.findMany({
+    include: {
+      user: true,
+      divisi: true,
+      penilaian: {
+        include: {
+          detail: true, 
+        },
+      },
+      laporan: true,
+    },
+  });
+
   return res.status(200).json(karyawan);
 });
 
 const getbyId = asyncHandler(async (req, res) => {
-  const { id } = req.body;
+  const { id } = req.params.id;
 
   const karyawanId = await prisma.karyawan.findUnique({
     where: { id: Number(id) },
-    select: {
-      nama: true,
-      email: true,
-      posisi: true,
-      divisiId: true,
-      tanggalMasuk: true,
+    include: {
+      divisi: true,
+      penilaian: true,
+      laporan: true,
     },
   });
 

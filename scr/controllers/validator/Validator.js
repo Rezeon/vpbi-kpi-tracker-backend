@@ -1,6 +1,5 @@
 const { z } = require("zod");
 
-
 const RoleEnum = z.enum(["admin", "user"], {
   errorMap: () => ({ message: "Role harus berupa 'admin' atau 'user'." }),
 });
@@ -10,9 +9,10 @@ const NotifTypeEnum = z.enum(["in_app", "email"], {
 });
 
 const NotifStatusEnum = z.enum(["terkirim", "gagal", "terbaca"], {
-  errorMap: () => ({ message: "Status notifikasi harus 'terkirim', 'gagal', atau 'terbaca'." }),
+  errorMap: () => ({
+    message: "Status notifikasi harus 'terkirim', 'gagal', atau 'terbaca'.",
+  }),
 });
-
 
 const userSchema = z.object({
   clerkId: z
@@ -34,7 +34,6 @@ const userSchema = z.object({
     .string({ required_error: "Email wajib diisi" })
     .email({ message: "Format email tidak valid" }),
 });
-
 
 const karyawanSchema = z.object({
   userId: z
@@ -97,8 +96,7 @@ const penilaianKpiSchema = z.object({
     .string({ required_error: "Bulan wajib diisi" })
     .min(1, { message: "Bulan tidak boleh kosong" }),
 
-  totalSkor: z
-    .number({ invalid_type_error: "Total skor harus berupa angka" }),
+  totalSkor: z.number({ invalid_type_error: "Total skor harus berupa angka" }),
 
   dibuatOlehId: z
     .number({ invalid_type_error: "dibuatOlehId harus berupa angka" })
@@ -114,8 +112,7 @@ const detailPenilaianSchema = z.object({
     .number({ invalid_type_error: "matriksId harus berupa angka" })
     .int({ message: "matriksId harus bilangan bulat" }),
 
-  nilai: z
-    .number({ invalid_type_error: "Nilai harus berupa angka" }),
+  nilai: z.number({ invalid_type_error: "Nilai harus berupa angka" }),
 });
 
 const laporanKpiSchema = z.object({
@@ -127,8 +124,7 @@ const laporanKpiSchema = z.object({
     .string({ required_error: "Bulan wajib diisi" })
     .min(1, { message: "Bulan tidak boleh kosong" }),
 
-  rataRata: z
-    .number({ invalid_type_error: "Rata-rata harus berupa angka" }),
+  rataRata: z.number({ invalid_type_error: "Rata-rata harus berupa angka" }),
 
   ringkasan: z.string().optional(),
 });

@@ -1,16 +1,10 @@
 const { getAuth } = require('@clerk/express');
-
+const prisma = require("../config/prisma");
 require("dotenv").config();
 
 const authRequest = async (req, res, next) => {
   try {
-    const authHeader = req.headers.authorization;
-    const token = authHeader?.split(" ")[1];
     const { sessionClaims } = getAuth(req);
-
-    if (!token) {
-      return res.status(401).json({ error: "No token provided" });
-    }
 
     if (!sessionClaims) {
       return res.status(401).json({ error: "Unauthorized" });
@@ -41,10 +35,15 @@ const requireRole = (role) => {
       select: {
         role: true,
         clerkId: true,
+        id: true
       },
     });
     if (user.role !== role) {
       return res.status(403).json({ error: "Forbidden" });
+    }
+    req.user = {
+      ...req.user,
+      id: user.id
     }
     next();
   };
