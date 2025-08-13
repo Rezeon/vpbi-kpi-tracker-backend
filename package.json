@@ -1,7 +1,8 @@
 {
+  "main": "src/index.js",
   "scripts": {
-    "dev": "nodemon index.js",
-    "start": "node index.js",
+    "dev": "nodemon scr/index.js",
+    "start": "node scr/index.js",
     "postinstall": "npx prisma generate"
   },
   "dependencies": {
