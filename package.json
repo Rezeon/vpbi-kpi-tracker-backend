@@ -1,7 +1,8 @@
 {
   "scripts": {
     "dev": "nodemon index.js",
-    "start": "node index.js"
+    "start": "node index.js",
+    "postinstall": "npx prisma generate"
   },
   "dependencies": {
     "@auth/express": "^0.11.0",
