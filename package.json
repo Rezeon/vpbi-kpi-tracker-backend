@@ -1,10 +1,10 @@
 {
   "name": "my-express-app",
   "version": "1.0.0",
-  "main": "src/index.js",
+  "main": "index.js",
   "scripts": {
-    "dev": "nodemon scr/index.js",
-    "start": "node scr/index.js",
+    "dev": "nodemon index.js",
+    "start": "node index.js",
     "postinstall": "npx prisma generate"
   },
   "dependencies": {
