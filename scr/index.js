@@ -1,7 +1,6 @@
 const serverless = require('serverless-http');
-const app = require('./scr/app');
+const app = require('./app');
 require('dotenv').config();
-
 app.use(express.json());
 
 app.get('/', (req, res) => {
