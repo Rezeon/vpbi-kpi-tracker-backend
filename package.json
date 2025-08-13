@@ -1,9 +1,9 @@
 {
   "scripts": {
-  "dev": "nodemon src/index.js",
-  "start": "node src/index.js"
-  }
-  ,
+  "dev": "nodemon scr/index.js",
+  "start": "node scr/index.js"
+  },
+
   "dependencies": {
     "@auth/express": "^0.11.0",
     "@clerk/backend": "^2.6.3",

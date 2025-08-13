@@ -1,5 +1,5 @@
 const http = require('http');
-const app = require('./scr/app');
+const app = require('./app');
 require('dotenv').config();
 
 const PORT = process.env.PORT;
