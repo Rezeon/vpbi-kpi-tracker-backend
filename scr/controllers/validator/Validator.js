@@ -7,7 +7,9 @@ const RoleEnum = z.enum(["admin", "user"], {
 const NotifTypeEnum = z.enum(["in_app", "email"], {
   errorMap: () => ({ message: "Tipe notifikasi harus 'in_app' atau 'email'." }),
 });
-
+const StatusBuktiEnum = z.enum(["draft", "menunggu_verifikasi", "disetujui", "ditolak"],{
+  errorMap: () => ({ message: "Tipe status , menunggu_verifikasi, disetujui, ditolak" }),
+})
 const NotifStatusEnum = z.enum(["terkirim", "gagal", "terbaca"], {
   errorMap: () => ({
     message: "Status notifikasi harus 'terkirim', 'gagal', atau 'terbaca'.",
@@ -129,6 +131,26 @@ const laporanKpiSchema = z.object({
   ringkasan: z.string().optional(),
 });
 
+const buktiKpiSchema = z.object({
+  karyawanId: z
+    .number({ invalid_type_error: "harus berupa int" })
+    .int({ message: "user harus bilangan bulat" }),
+  matriksId: z
+    .number({ invalid_type_error: "harus berupa int" })
+    .int({ message: "harus berupa bilangan bulat" }),
+  bulan: z
+    .string({ required_error: "bulan harus diisi" })
+    .min(1, { message: "bulan harus diisi" }),
+  fileUrl: z
+    .string({ required_error: "harus diisi" })
+    .min(0,{ message: "harus berupa URL yang valid" }),
+  deskripsi: z
+    .string({ required_error: "harus diisi" })
+    .min(1, { message: "deskripsi harus diisi" }),
+  status: StatusBuktiEnum,
+});
+
+
 const notifikasiSchema = z.object({
   userId: z
     .number({ invalid_type_error: "userId harus berupa angka" })
@@ -171,6 +193,7 @@ module.exports = {
   penilaianKpiSchema,
   detailPenilaianSchema,
   laporanKpiSchema,
+  buktiKpiSchema,
   notifikasiSchema,
   resetTokenSchema,
 };
