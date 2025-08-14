@@ -46,7 +46,7 @@ const getAllKaryawan = asyncHandler(async (req, res) => {
       divisi: true,
       penilaian: {
         include: {
-          detail: true, 
+          detail: true,
         },
       },
       laporan: true,
@@ -56,7 +56,7 @@ const getAllKaryawan = asyncHandler(async (req, res) => {
   return res.status(200).json(karyawan);
 });
 
-const getbyId = asyncHandler(async (req, res) => {
+const getKaryawanbyId = asyncHandler(async (req, res) => {
   const { id } = req.params.id;
 
   const karyawanId = await prisma.karyawan.findUnique({
@@ -111,7 +111,7 @@ const deleteKaryawan = asyncHandler(async (req, res) => {
 module.exports = {
   addKaryawan,
   getAllKaryawan,
-  getbyId,
+  getKaryawanbyId,
   updateKaryawan,
   deleteKaryawan,
 };
