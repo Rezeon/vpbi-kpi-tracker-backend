@@ -11,33 +11,33 @@ const addBuktiKpi = asyncHandler(async (req, res) => {
     return res.status(400).json({ errors });
   }
 
-  const bukti = await prisma.buktiKPI.create({
+  const buktiKpi = await prisma.buktiKPI.create({
     data: validateData.data,
   });
 
-  return res.status(201).json(bukti);
+  return res.status(201).json(buktiKpi);
 });
 
 const getAllBuktiKpi = asyncHandler(async (req, res) => {
-  const buktiList = await prisma.buktiKPI.findMany({
+  const buktiKpiList = await prisma.buktiKPI.findMany({
     include: { karyawan: true, matriks: true },
   });
-  return res.status(200).json(buktiList);
+  return res.status(200).json(buktiKpiList);
 });
 
 const getBuktiKpiById = asyncHandler(async (req, res) => {
   const id = Number(req.params.id);
 
-  const bukti = await prisma.buktiKPI.findUnique({
+  const buktiKpi = await prisma.buktiKPI.findUnique({
     where: { id },
     include: { karyawan: true, matriks: true },
   });
 
-  if (!bukti) {
-    return res.status(404).json({ error: "BuktiKPI tidak ditemukan" });
+  if (!buktiKpi) {
+    return res.status(404).json({ error: "Bukti KPI tidak ditemukan" });
   }
 
-  return res.status(200).json(bukti);
+  return res.status(200).json(buktiKpi);
 });
 
 const updateBuktiKpi = asyncHandler(async (req, res) => {
@@ -52,12 +52,12 @@ const updateBuktiKpi = asyncHandler(async (req, res) => {
     });
   }
 
-  const existingBukti = await prisma.buktiKPI.findUnique({
+  const existingBuktiKpi = await prisma.buktiKPI.findUnique({
     where: { id },
     include: { karyawan: true },
   });
 
-  if (!existingBukti) {
+  if (!existingBuktiKpi) {
     return res.status(404).json({ error: "Bukti KPI tidak ditemukan" });
   }
 
@@ -66,11 +66,11 @@ const updateBuktiKpi = asyncHandler(async (req, res) => {
     data: validateData.data,
   });
 
-  if (existingBukti.karyawan) {
+  if (existingBuktiKpi.karyawan) {
     try {
       await transporter.sendMail({
         from: process.env.GOOGLE_APP_ACCOUNT,
-        to: existingBukti.karyawan.email,
+        to: existingBuktiKpi.karyawan.email,
         subject: "Matrik anda",
         html: `<b>Terimakasih atas kerja sama anda. Status bukti KPI anda sudah berubah menjadi ${req.body.status}</b>`,
       });
@@ -81,7 +81,6 @@ const updateBuktiKpi = asyncHandler(async (req, res) => {
 
   return res.status(200).json(updated);
 });
-
 
 const deleteBuktiKpi = asyncHandler(async (req, res) => {
   const id = Number(req.params.id || req.body.id);
