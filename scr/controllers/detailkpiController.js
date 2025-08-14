@@ -1,8 +1,6 @@
 const asyncHandler = require("express-async-handler");
 const prisma = require("../config/prisma");
-const {
-  detailPenilaianSchema,
-} = require("./validator/Validator");
+const { detailPenilaianSchema } = require("./validator/Validator");
 
 const addDetailKpi = asyncHandler(async (req, res) => {
   const validateData = detailPenilaianSchema
@@ -32,7 +30,7 @@ const getAllDetail = asyncHandler(async (req, res) => {
 });
 
 const getDetailById = asyncHandler(async (req, res) => {
-    const id = Number(req.params.id || req.body.id);
+  const id = Number(req.params.id || req.body.id);
 
   const detailKpi = await prisma.detailPenilaian.findUnique({
     where: { id: Number(id) },
@@ -59,12 +57,12 @@ const updateDetailKpi = asyncHandler(async (req, res) => {
     });
   }
 
-  const updated = await prisma.detailPenilaian.update({
+  const updatedPenilaian = await prisma.detailPenilaian.update({
     where: { id: Number(id) },
     data: validateResult.data,
   });
 
-  return res.status(200).json(updated);
+  return res.status(200).json(updatedPenilaian);
 });
 
 const deleteDetailKpi = asyncHandler(async (req, res) => {
@@ -83,9 +81,9 @@ const deleteDetailKpi = asyncHandler(async (req, res) => {
 });
 
 module.exports = {
-    addDetailKpi,
-    getAllDetail,
-    getDetailById,
-    updateDetailKpi,
-    deleteDetailKpi
-}
+  addDetailKpi,
+  getAllDetail,
+  getDetailById,
+  updateDetailKpi,
+  deleteDetailKpi,
+};
