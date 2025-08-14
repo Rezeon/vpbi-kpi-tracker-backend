@@ -23,7 +23,7 @@ const getAllDivisi = asyncHandler(async (req, res) => {
 });
 
 const getDivisiById = asyncHandler(async (req, res) => {
-    const id = Number(req.params.id || req.body.id);
+  const id = Number(req.params.id || req.body.id);
 
   const divisiId = await prisma.divisi.findUnique({
     where: { id: Number(id) },
@@ -61,11 +61,11 @@ const updateDivisi = asyncHandler(async (req, res) => {
 const deleteDivisi = asyncHandler(async (req, res) => {
   const { id } = req.body;
 
-  const existing = await prisma.divisi.findUnique({
+  const existingDivisi = await prisma.divisi.findUnique({
     where: { id: Number(id) },
   });
 
-  if (!existing) {
+  if (!existingDivisi) {
     return res.status(404).json({ error: "divisi tidak ditemukan" });
   }
 
@@ -74,9 +74,9 @@ const deleteDivisi = asyncHandler(async (req, res) => {
 });
 
 module.exports = {
-    addDivisi,
-    getAllDivisi,
-    getDivisiById,
-    updateDivisi,
-    deleteDivisi
-}
+  addDivisi,
+  getAllDivisi,
+  getDivisiById,
+  updateDivisi,
+  deleteDivisi,
+};
