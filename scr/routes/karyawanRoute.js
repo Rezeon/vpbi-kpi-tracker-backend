@@ -4,7 +4,7 @@ const { publicProcedure, adminProcedure } = require("../utils/procedure");
 const {
   addKaryawan,
   getAllKaryawan,
-  getbyId,
+  getKaryawanbyId,
   updateKaryawan,
   deleteKaryawan,
 } = require("../controllers/karyawanController");
@@ -12,7 +12,7 @@ const {
 router.post("/add", ...adminProcedure(addKaryawan)); // akses umum
 router.patch("/update", ...adminProcedure(updateKaryawan));
 router.get("/all", ...publicProcedure(getAllKaryawan));
-router.get(`/:id`, ...publicProcedure(getbyId));
+router.get(`/:id`, ...publicProcedure(getKaryawanbyId));
 router.delete("/delete/karyawan", ...adminProcedure(deleteKaryawan));
 
 module.exports = router;
