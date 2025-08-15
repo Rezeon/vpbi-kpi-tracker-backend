@@ -13,6 +13,6 @@ router.post("/add", ...adminProcedure(addKaryawan)); // akses umum
 router.patch("/update", ...adminProcedure(updateKaryawan));
 router.get("/all", ...publicProcedure(getAllKaryawan));
 router.get(`/:id`, ...publicProcedure(getKaryawanbyId));
-router.delete("/delete/karyawan", ...adminProcedure(deleteKaryawan));
+router.delete("/delete", ...adminProcedure(deleteKaryawan));
 
 module.exports = router;

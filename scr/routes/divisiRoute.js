@@ -13,6 +13,6 @@ router.post("/add", ...adminProcedure(addDivisi)); // akses umum
 router.patch("/update", ...adminProcedure(updateDivisi)); 
 router.get("/all", ...publicProcedure(getAllDivisi)); 
 router.get(`/:id`, ...publicProcedure(getDivisiById)); 
-router.delete("/delete/divisi", ...adminProcedure(deleteDivisi)); 
+router.delete("/delete", ...adminProcedure(deleteDivisi)); 
 
 module.exports = router;

@@ -13,6 +13,6 @@ router.post("/add", ...adminProcedure(addMatriksKpi)); // akses umum
 router.patch("/update", ...adminProcedure(updateMatriksKpi)); 
 router.get("/all", ...publicProcedure(getAllMatriksKpi)); 
 router.get("/:id", ...publicProcedure(getMatriksKpiById)); 
-router.delete("/delete/matrik", ...adminProcedure(deleteMatriksKpi)); 
+router.delete("/delete", ...adminProcedure(deleteMatriksKpi)); 
 
 module.exports = router;
