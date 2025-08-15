@@ -5,8 +5,12 @@ function publicProcedure(route) {
   return [authRequest, route];
 }
 
+function leaderProcedure(route) {
+  return [authRequest, requireRole(["admin", "leader"]), route];
+}
+
 function adminProcedure(route) {
   return [authRequest, requireRole("admin"), route];
 }
 
-module.exports = { publicProcedure, adminProcedure };
+module.exports = { publicProcedure, adminProcedure, leaderProcedure };

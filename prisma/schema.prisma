@@ -23,7 +23,6 @@ model User {
   karyawanId  Int?           @unique
   createdAt   DateTime       @default(now())
   notifikasi  Notifikasi[]
-  resetTokens ResetToken[]
   penilaian   PenilaianKPI[] @relation("DibuatOleh")
 }
 
@@ -117,18 +116,11 @@ model Notifikasi {
   createdAt DateTime    @default(now())
 }
 
-model ResetToken {
-  id        Int      @id @default(autoincrement())
-  user      User     @relation(fields: [userId], references: [id])
-  userId    Int
-  token     String   @unique
-  expiresAt DateTime
-  used      Boolean  @default(false)
-}
 
 enum Role {
   admin
   user
+  leader
 }
 
 enum StatusBukti {

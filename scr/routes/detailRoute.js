@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { publicProcedure, adminProcedure } = require("../utils/procedure");
+const { publicProcedure, leaderProcedure } = require("../utils/procedure");
 const {
   addDetailKpi,
   getAllDetail,
@@ -9,10 +9,10 @@ const {
   deleteDetailKpi,
 } = require("../controllers/detailkpiController");
 
-router.post("/add", ...adminProcedure(addDetailKpi)); // akses umum
-router.patch("/update", ...adminProcedure(updateDetailKpi));
+router.post("/add", ...leaderProcedure(addDetailKpi)); // akses umum
+router.patch("/update", ...leaderProcedure(updateDetailKpi));
 router.get("/all", ...publicProcedure(getAllDetail));
 router.get(`/:id`, ...publicProcedure(getDetailById));
-router.delete("/delete", ...adminProcedure(deleteDetailKpi));
+router.delete("/delete", ...leaderProcedure(deleteDetailKpi));
 
 module.exports = router;
