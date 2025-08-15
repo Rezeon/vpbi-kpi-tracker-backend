@@ -1,6 +1,6 @@
 const { z } = require("zod");
 
-const RoleEnum = z.enum(["admin", "user"], {
+const RoleEnum = z.enum(["admin", "user", "leader"], {
   errorMap: () => ({ message: "Role harus berupa 'admin' atau 'user'." }),
 });
 
