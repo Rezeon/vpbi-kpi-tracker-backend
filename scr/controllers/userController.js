@@ -16,7 +16,12 @@ const createUser = asyncHandler(async (req, res) => {
   const roleCek = await prisma.user.findUnique({
     where: { clerkId: clerkId },
   });
-  if (roleCek && (roleCek.role === "admin" || roleCek.role === "user" || roleCek.role === "leader" )) {
+  if (
+    roleCek &&
+    (roleCek.role === "admin" ||
+      roleCek.role === "user" ||
+      roleCek.role === "leader")
+  ) {
     return res.status(400).json({
       message: `Anda sudah terdaftar dengan role ${roleCek.role}`,
     });
@@ -69,15 +74,20 @@ const getAllUser = asyncHandler(async (req, res) => {
 
 const getUserById = asyncHandler(async (req, res) => {
   const id = String(req.params.id || req.body.id);
+
   const userById = await prisma.user.findUnique({
     where: { clerkId: id },
-    include: {
+    select: {
       username: true,
       email: true,
       clerkId: true,
       role: true,
     },
   });
+
+  if (!userById) {
+    return res.status(404).json({ message: "User not found" });
+  }
 
   return res.status(200).json(userById);
 });
