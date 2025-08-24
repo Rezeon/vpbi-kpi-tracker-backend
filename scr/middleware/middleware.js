@@ -25,28 +25,28 @@ const authRequest = async (req, res, next) => {
   }
 };
 
-const requireRole = (role) => {
+const requireRole = (roles) => {
   return async (req, res, next) => {
     const { clerkId } = req.user;
     const user = await prisma.user.findUnique({
-      where: {
-        clerkId: clerkId,
-      },
-      select: {
-        role: true,
-        clerkId: true,
-        id: true
-      },
+      where: { clerkId },
+      select: { role: true, id: true }
     });
-    if (user.role !== role) {
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    const allowedRoles = Array.isArray(roles) ? roles : [roles];
+
+    if (!allowedRoles.includes(user.role)) {
       return res.status(403).json({ error: "Forbidden" });
     }
-    req.user = {
-      ...req.user,
-      id: user.id
-    }
+
+    req.user = { ...req.user, id: user.id };
     next();
   };
 };
+
 
 module.exports = { authRequest, requireRole };
