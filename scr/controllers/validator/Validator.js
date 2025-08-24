@@ -87,6 +87,9 @@ const matriksKpiSchema = z.object({
   bobot: z
     .number({ invalid_type_error: "Bobot harus berupa angka" })
     .min(0, { message: "Bobot tidak boleh negatif" }),
+  karyawanId: z
+    .number({ invalid_type_error: "karyawanId harus berupa angka" })
+    .int({ message: "karyawanId harus bilangan bulat" }),
 });
 
 const penilaianKpiSchema = z.object({

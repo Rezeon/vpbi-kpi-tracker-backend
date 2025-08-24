@@ -40,6 +40,7 @@ model Karyawan {
   penilaian    PenilaianKPI[]
   laporan      LaporanKPI[]
   BuktiKPI     BuktiKPI[]
+  matriks      MatriksKPI[]
 }
 
 model Divisi {
@@ -55,6 +56,8 @@ model MatriksKPI {
   namaKPI   String
   deskripsi String
   bobot     Float
+  karyawan   Karyawan    @relation(fields: [karyawanId], references: [id])
+  karyawanId Int
   createdAt DateTime          @default(now())
   detail    DetailPenilaian[]
   BuktiKPI  BuktiKPI[]

@@ -16,7 +16,7 @@ const createUser = asyncHandler(async (req, res) => {
   const roleCek = await prisma.user.findUnique({
     where: { clerkId: clerkId },
   });
-  if (roleCek && (roleCek.role === "admin" || roleCek.role === "user")) {
+  if (roleCek && (roleCek.role === "admin" || roleCek.role === "user" || roleCek.role === "leader" )) {
     return res.status(400).json({
       message: `Anda sudah terdaftar dengan role ${roleCek.role}`,
     });
