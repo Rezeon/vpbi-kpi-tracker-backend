@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { adminProcedure } = require("../utils/procedure");
+const { adminProcedure, publicProcedure } = require("../utils/procedure");
 const {
   createUser,
   getAllUser,
@@ -9,7 +9,7 @@ const {
   deleteUser,
 } = require("../controllers/userController");
 
-router.post("/register", ...adminProcedure(createUser)); // akses umum
+router.post("/register", ...publicProcedure(createUser)); // akses umum
 router.patch("/update", ...adminProcedure(updateUser)); 
 router.get("/AllUser", ...adminProcedure(getAllUser)); 
 router.get("/UserById", ...adminProcedure(getUserById)); 
