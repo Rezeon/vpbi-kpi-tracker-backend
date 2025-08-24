@@ -11,7 +11,7 @@ const {
 
 router.post("/register", ...publicProcedure(createUser)); // akses umum
 router.patch("/update", ...adminProcedure(updateUser)); 
-router.get("/AllUser", ...adminProcedure(getAllUser)); 
+router.get("/:id", ...adminProcedure(getAllUser)); 
 router.get("/UserById", ...adminProcedure(getUserById)); 
 router.delete("/delete/user", ...adminProcedure(deleteUser)); 
 
