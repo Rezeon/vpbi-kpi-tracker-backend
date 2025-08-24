@@ -24,6 +24,7 @@ model User {
   createdAt   DateTime       @default(now())
   notifikasi  Notifikasi[]
   penilaian   PenilaianKPI[] @relation("DibuatOleh")
+  divisiLeader Divisi?  @relation("DivisiLeader")
 }
 
 model Karyawan {
@@ -49,6 +50,8 @@ model Divisi {
   deskripsi String
   createdAt DateTime   @default(now())
   karyawan  Karyawan[]
+  leaderId  Int?      @unique
+  leader    User?     @relation("DivisiLeader", fields: [leaderId], references: [id])
 }
 
 model MatriksKPI {
