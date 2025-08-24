@@ -68,7 +68,7 @@ const getAllUser = asyncHandler(async (req, res) => {
 });
 
 const getUserById = asyncHandler(async (req, res) => {
-  const { id } = req.body;
+  const id = String(req.params.id || req.body.id);
   const userById = await prisma.user.findUnique({
     where: { clerkId: id },
     include: {
