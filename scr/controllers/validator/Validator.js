@@ -67,8 +67,8 @@ const karyawanSchema = z.object({
 
 const divisiSchema = z.object({
   leaderId: z
-    .number({ invalid_type_error: "karyawanId harus berupa angka" })
-    .int({ message: "karyawanId harus bilangan bulat" }),
+    .number({ invalid_type_error: "leaderId harus berupa angka" })
+    .int({ message: "leaderId harus bilangan bulat" }),
   nama: z
     .string({ required_error: "Nama divisi wajib diisi" })
     .min(1, { message: "Nama divisi tidak boleh kosong" }),
