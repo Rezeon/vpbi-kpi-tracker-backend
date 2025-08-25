@@ -66,7 +66,7 @@ const updateDetailKpi = asyncHandler(async (req, res) => {
 });
 
 const deleteDetailKpi = asyncHandler(async (req, res) => {
-  const { id } = req.body;
+  const id = (req.params.id || req.body.id);
 
   const existing = await prisma.detailPenilaian.findUnique({
     where: { id: Number(id) },

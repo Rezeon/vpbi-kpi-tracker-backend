@@ -85,7 +85,7 @@ const updatePenilaianKpi = asyncHandler(async (req, res) => {
 });
 
 const deletePenilaianKpi = asyncHandler(async (req, res) => {
-  const { id } = req.body;
+  const id = (req.params.id || req.body.id);
 
   try {
     await prisma.penilaianKPI.delete({ where: { id: Number(id) } });

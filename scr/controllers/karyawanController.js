@@ -76,7 +76,8 @@ const getKaryawanbyId = asyncHandler(async (req, res) => {
 });
 
 const updateKaryawan = asyncHandler(async (req, res) => {
-  const { id, ...data } = req.body;
+  const id = Number(req.params.id || req.body.id);
+  const { ...data } = req.body;
 
   const validateResult = karyawanSchema.partial().safeParse(data);
   if (!validateResult.success) {
@@ -94,7 +95,7 @@ const updateKaryawan = asyncHandler(async (req, res) => {
 });
 
 const deleteKaryawan = asyncHandler(async (req, res) => {
-  const { id } = req.body;
+  const id = (req.params.id || req.body.id);
 
   const existing = await prisma.karyawan.findUnique({
     where: { id: Number(id) },

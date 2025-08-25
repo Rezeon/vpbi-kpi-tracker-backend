@@ -10,9 +10,9 @@ const {
 } = require("../controllers/divisiController");
 
 router.post("/add", ...adminProcedure(addDivisi)); // akses umum
-router.patch("/update", ...adminProcedure(updateDivisi)); 
+router.patch("/update/:id", ...adminProcedure(updateDivisi)); 
 router.get("/all", ...publicProcedure(getAllDivisi)); 
 router.get(`/:id`, ...publicProcedure(getDivisiById)); 
-router.delete("/delete", ...adminProcedure(deleteDivisi)); 
+router.delete("/delete/:id", ...adminProcedure(deleteDivisi)); 
 
 module.exports = router;

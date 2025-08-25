@@ -59,7 +59,7 @@ const updateMatriksKpi = asyncHandler(async (req, res) => {
 });
 
 const deleteMatriksKpi = asyncHandler(async (req, res) => {
-  const { id } = req.body;
+  const id = (req.params.id || req.body.id);
 
   const existing = await prisma.matriksKPI.findUnique({
     where: { id: Number(id) },

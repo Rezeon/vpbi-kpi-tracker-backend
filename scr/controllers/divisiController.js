@@ -59,7 +59,7 @@ const updateDivisi = asyncHandler(async (req, res) => {
 });
 
 const deleteDivisi = asyncHandler(async (req, res) => {
-  const { id } = req.body;
+  const id = (req.params.id || req.body.id);
 
   const existingDivisi = await prisma.divisi.findUnique({
     where: { id: Number(id) },
