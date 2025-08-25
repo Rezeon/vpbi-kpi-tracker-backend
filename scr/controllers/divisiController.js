@@ -40,7 +40,8 @@ const getDivisiById = asyncHandler(async (req, res) => {
 });
 
 const updateDivisi = asyncHandler(async (req, res) => {
-  const { id, ...data } = req.body;
+  const id = (req.params.id || req.body.id);
+  const { ...data } = req.body;
 
   const validatedData = divisiSchema.partial().safeParse(data);
 
