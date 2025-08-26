@@ -17,7 +17,9 @@ const addDivisi = asyncHandler(async (req, res) => {
 });
 
 const getAllDivisi = asyncHandler(async (req, res) => {
-  const divisi = await prisma.divisi.findMany();
+  const divisi = await prisma.divisi.findMany({
+    include: { karyawan: true, leader: true },
+  });
 
   return res.status(200).json(divisi);
 });
@@ -29,6 +31,7 @@ const getDivisiById = asyncHandler(async (req, res) => {
     where: { id: Number(id) },
     include: {
       karyawan: true,
+      leader: true,
     },
   });
 
@@ -40,7 +43,7 @@ const getDivisiById = asyncHandler(async (req, res) => {
 });
 
 const updateDivisi = asyncHandler(async (req, res) => {
-  const id = (req.params.id || req.body.id);
+  const id = req.params.id || req.body.id;
   const { ...data } = req.body;
 
   const validatedData = divisiSchema.partial().safeParse(data);
@@ -60,7 +63,7 @@ const updateDivisi = asyncHandler(async (req, res) => {
 });
 
 const deleteDivisi = asyncHandler(async (req, res) => {
-  const id = (req.params.id || req.body.id);
+  const id = req.params.id || req.body.id;
 
   const existingDivisi = await prisma.divisi.findUnique({
     where: { id: Number(id) },
