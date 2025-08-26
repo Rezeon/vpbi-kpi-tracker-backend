@@ -40,7 +40,7 @@ const requireRole = (roles) => {
     const allowedRoles = Array.isArray(roles) ? roles : [roles];
 
     if (!allowedRoles.includes(user.role)) {
-      return res.status(403).json({ error: "Forbidden" });
+      return res.status(403).json({ error: "Forbidden You Don't have permission to grab this api" });
     }
 
     req.user = { ...req.user, id: user.id };
