@@ -19,17 +19,20 @@ const addMatriksKpi = asyncHandler(async (req, res) => {
 });
 
 const getAllMatriksKpi = asyncHandler(async (req, res) => {
-  const matriksList = await prisma.matriksKPI.findMany();
+  const matriksList = await prisma.matriksKPI.findMany({
+    include: { karyawan: true },
+  });
   return res.status(200).json(matriksList);
 });
 
 const getMatriksKpiById = asyncHandler(async (req, res) => {
-    const id = Number(req.params.id || req.body.id);
+  const id = Number(req.params.id || req.body.id);
 
   const matriks = await prisma.matriksKPI.findUnique({
     where: { id: Number(id) },
     include: {
       detail: true,
+      karyawan: true,
     },
   });
 
@@ -59,7 +62,7 @@ const updateMatriksKpi = asyncHandler(async (req, res) => {
 });
 
 const deleteMatriksKpi = asyncHandler(async (req, res) => {
-  const id = (req.params.id || req.body.id);
+  const id = req.params.id || req.body.id;
 
   const existing = await prisma.matriksKPI.findUnique({
     where: { id: Number(id) },
