@@ -49,6 +49,7 @@ const getAllKaryawan = asyncHandler(async (req, res) => {
           detail: true,
         },
       },
+      matriks: true,
       laporan: true,
     },
   });
@@ -65,6 +66,8 @@ const getKaryawanbyId = asyncHandler(async (req, res) => {
       divisi: true,
       penilaian: true,
       laporan: true,
+
+      matriks: true,
     },
   });
 
@@ -95,7 +98,7 @@ const updateKaryawan = asyncHandler(async (req, res) => {
 });
 
 const deleteKaryawan = asyncHandler(async (req, res) => {
-  const id = (req.params.id || req.body.id);
+  const id = req.params.id || req.body.id;
 
   const existing = await prisma.karyawan.findUnique({
     where: { id: Number(id) },
