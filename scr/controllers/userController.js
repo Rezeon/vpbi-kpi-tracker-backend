@@ -88,7 +88,11 @@ const getUserById = asyncHandler(async (req, res) => {
       role: true,
       divisiLeader: {
         include: {
-          karyawan: true,
+          karyawan: {
+            include : {
+              matriks:true
+            }
+          },
         },
       },
       notifikasi: true,
