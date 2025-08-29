@@ -89,9 +89,13 @@ const getUserById = asyncHandler(async (req, res) => {
       divisiLeader: {
         include: {
           karyawan: {
-            include : {
-              matriks:true
-            }
+            include: {
+              matriks: {
+                include: {
+                  karyawan: true,
+                },
+              },
+            },
           },
         },
       },
