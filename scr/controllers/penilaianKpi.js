@@ -67,7 +67,8 @@ const getPenilaianKpiById = asyncHandler(async (req, res) => {
 });
 
 const updatePenilaianKpi = asyncHandler(async (req, res) => {
-  const { id, ...data } = req.body;
+  const id = req.params.id || req.body.id;
+  const { ...data } = req.body;
 
   const validateResult = penilaianKpiSchema.partial().safeParse(data);
   if (!validateResult.success) {

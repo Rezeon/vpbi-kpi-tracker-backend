@@ -10,7 +10,7 @@ const {
 } = require("../controllers/penilaianKpi");
 
 router.post("/add", ...leaderProcedure(addPenilaianKpi)); // akses umum
-router.patch("/update", ...leaderProcedure(updatePenilaianKpi));
+router.patch("/update/:id", ...leaderProcedure(updatePenilaianKpi));
 router.get("/all", ...publicProcedure(getAllPenilaianKpi));
 router.get("/:id", ...publicProcedure(getPenilaianKpiById));
 router.delete("/delete/:id", ...leaderProcedure(deletePenilaianKpi));
