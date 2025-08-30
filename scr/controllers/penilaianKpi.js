@@ -39,7 +39,6 @@ const addPenilaianKpi = asyncHandler(async (req, res) => {
 const getAllPenilaianKpi = asyncHandler(async (req, res) => {
   const penilaianKpi = await prisma.penilaianKPI.findMany({
     include: {
-      karyawanId: true,
       karyawan: true,
       dibuatOleh: true,
       detail: true,
@@ -54,7 +53,6 @@ const getPenilaianKpiById = asyncHandler(async (req, res) => {
   const penilaianKpi = await prisma.penilaianKPI.findUnique({
     where: { id: Number(id) },
     include: {
-      karyawanId: true,
       karyawan: true,
       dibuatOleh: true,
       detail: true,
