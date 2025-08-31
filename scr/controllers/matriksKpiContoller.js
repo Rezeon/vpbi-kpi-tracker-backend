@@ -20,7 +20,7 @@ const addMatriksKpi = asyncHandler(async (req, res) => {
 
 const getAllMatriksKpi = asyncHandler(async (req, res) => {
   const matriksList = await prisma.matriksKPI.findMany({
-    include: { karyawan: true },
+    include: { karyawan: true, detail: true },
   });
   return res.status(200).json(matriksList);
 });
