@@ -31,7 +31,11 @@ const getMatriksKpiById = asyncHandler(async (req, res) => {
   const matriks = await prisma.matriksKPI.findUnique({
     where: { id: Number(id) },
     include: {
-      detail: true,
+      detail: {
+        include: {
+          nilai: true,
+        },
+      },
       karyawan: true,
     },
   });

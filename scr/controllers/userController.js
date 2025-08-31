@@ -94,7 +94,11 @@ const getUserById = asyncHandler(async (req, res) => {
               matriks: {
                 include: {
                   karyawan: true,
-                  detail: true,
+                  detail: {
+                    include: {
+                      nilai: true,
+                    },
+                  },
                 },
               },
             },
