@@ -5,10 +5,12 @@ const { transporter } = require("../utils/nodeMailer");
 
 const addPenilaianKpi = asyncHandler(async (req, res) => {
   const validateResult = penilaianKpiSchema.safeParse(req.body);
-  console.log(req.body)
+  console.log(req.body);
   if (!validateResult.success) {
     return res.status(400).json({
-      errors: validateResult.error.errors.map((e) => e.message)|| ["Data tidak valid"],
+      errors: validateResult.error.errors.map((e) => e.message) || [
+        "Data tidak valid",
+      ],
     });
   }
 
@@ -76,17 +78,35 @@ const updatePenilaianKpi = asyncHandler(async (req, res) => {
       errors: validateResult.error.errors.map((e) => e.message),
     });
   }
-
+  const employeScore = await prisma.karyawan.findUnique({
+    where: { id: Number(req.body.karyawanId) },
+    select: {
+      matriks: {
+        select: {
+          detail: {
+            nilai: true,
+          },
+        },
+      },
+    },
+  });
+  const nilaiList = employeScore.matriks.flatMap((m) =>
+    m.detail.map((d) => d.nilai)
+  );
+  const totalPenilaian = nilaiList.reduce((acc, val) => acc + val, 0);
   const updated = await prisma.penilaianKPI.update({
     where: { id: Number(id) },
-    data: validateResult.data,
+    data: {
+      totalSkor: Number(totalPenilaian), 
+      ...validateResult.data, 
+    },
   });
 
   return res.status(200).json(updated);
 });
 
 const deletePenilaianKpi = asyncHandler(async (req, res) => {
-  const id = (req.params.id || req.body.id);
+  const id = req.params.id || req.body.id;
 
   try {
     await prisma.penilaianKPI.delete({ where: { id: Number(id) } });

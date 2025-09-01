@@ -71,7 +71,7 @@ model PenilaianKPI {
   karyawan     Karyawan          @relation(fields: [karyawanId], references: [id])
   karyawanId   Int
   bulan        String
-  totalSkor    Float
+  totalSkor    Float?
   dibuatOleh   User              @relation("DibuatOleh", fields: [dibuatOlehId], references: [id])
   dibuatOlehId Int
   createdAt    DateTime          @default(now())

@@ -104,8 +104,6 @@ const penilaianKpiSchema = z.object({
     .string({ required_error: "Bulan wajib diisi" })
     .min(1, { message: "Bulan tidak boleh kosong" }),
 
-  totalSkor: z.number({ invalid_type_error: "Total skor harus berupa angka" }),
-
   dibuatOlehId: z
     .number({ invalid_type_error: "dibuatOlehId harus berupa angka" })
     .int({ message: "dibuatOlehId harus bilangan bulat" }),
