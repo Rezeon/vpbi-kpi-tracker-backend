@@ -1,4 +1,4 @@
-const { z } = require("zod");
+const { z, optional } = require("zod");
 
 const RoleEnum = z.enum(["admin", "user", "leader"], {
   errorMap: () => ({ message: "Role harus berupa 'admin' atau 'user'." }),
@@ -7,9 +7,14 @@ const RoleEnum = z.enum(["admin", "user", "leader"], {
 const NotifTypeEnum = z.enum(["in_app", "email"], {
   errorMap: () => ({ message: "Tipe notifikasi harus 'in_app' atau 'email'." }),
 });
-const StatusBuktiEnum = z.enum(["draft", "menunggu_verifikasi", "disetujui", "ditolak"],{
-  errorMap: () => ({ message: "Tipe status , menunggu_verifikasi, disetujui, ditolak" }),
-})
+const StatusBuktiEnum = z.enum(
+  ["draft", "menunggu_verifikasi", "disetujui", "ditolak"],
+  {
+    errorMap: () => ({
+      message: "Tipe status , menunggu_verifikasi, disetujui, ditolak",
+    }),
+  }
+);
 const NotifStatusEnum = z.enum(["terkirim", "gagal", "terbaca"], {
   errorMap: () => ({
     message: "Status notifikasi harus 'terkirim', 'gagal', atau 'terbaca'.",
@@ -103,6 +108,10 @@ const penilaianKpiSchema = z.object({
   bulan: z
     .string({ required_error: "Bulan wajib diisi" })
     .min(1, { message: "Bulan tidak boleh kosong" }),
+  totalSkor: z
+    .number({ invalid_type_error: "Total skor harus berupa angka" })
+    .nullable()
+    .optional(),
 
   dibuatOlehId: z
     .number({ invalid_type_error: "dibuatOlehId harus berupa angka" })
@@ -147,13 +156,12 @@ const buktiKpiSchema = z.object({
     .min(1, { message: "bulan harus diisi" }),
   fileUrl: z
     .string({ required_error: "harus diisi" })
-    .min(0,{ message: "harus berupa URL yang valid" }),
+    .min(0, { message: "harus berupa URL yang valid" }),
   deskripsi: z
     .string({ required_error: "harus diisi" })
     .min(1, { message: "deskripsi harus diisi" }),
   status: StatusBuktiEnum,
 });
-
 
 const notifikasiSchema = z.object({
   userId: z
