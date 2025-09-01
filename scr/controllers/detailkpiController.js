@@ -48,7 +48,8 @@ const getDetailById = asyncHandler(async (req, res) => {
 });
 
 const updateDetailKpi = asyncHandler(async (req, res) => {
-  const { id, ...data } = req.body;
+  const id = Number(req.params.id || req.body.id);
+  const { ...data } = req.body;
 
   const validateResult = detailPenilaianSchema.partial().safeParse(data);
   if (!validateResult.success) {
@@ -66,7 +67,7 @@ const updateDetailKpi = asyncHandler(async (req, res) => {
 });
 
 const deleteDetailKpi = asyncHandler(async (req, res) => {
-  const id = (req.params.id || req.body.id);
+  const id = req.params.id || req.body.id;
 
   const existing = await prisma.detailPenilaian.findUnique({
     where: { id: Number(id) },
