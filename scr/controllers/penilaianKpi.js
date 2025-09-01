@@ -14,8 +14,28 @@ const addPenilaianKpi = asyncHandler(async (req, res) => {
     });
   }
 
+  const employeScore = await prisma.karyawan.findUnique({
+    where: { id: Number(req.body.karyawanId) },
+    select: {
+      matriks: {
+        select: {
+          detail: {
+            nilai: true,
+          },
+        },
+      },
+    },
+  });
+  const nilaiList =
+    employeScore?.matriks?.flatMap((m) => m.detail.map((d) => d.nilai)) || [];
+
+  const totalPenilaian = nilaiList.reduce((acc, val) => acc + val, 0);
+
   const penilaianKpi = await prisma.penilaianKPI.create({
-    data: validateResult.data,
+    data: {
+      totalSkor: totalPenilaian,
+      ...validateResult.data,
+    },
   });
 
   const karyawanData = await prisma.karyawan.findUnique({
@@ -97,8 +117,8 @@ const updatePenilaianKpi = asyncHandler(async (req, res) => {
   const updated = await prisma.penilaianKPI.update({
     where: { id: Number(id) },
     data: {
-      totalSkor: Number(totalPenilaian), 
-      ...validateResult.data, 
+      totalSkor: totalPenilaian,
+      ...validateResult.data,
     },
   });
 
