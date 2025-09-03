@@ -44,7 +44,8 @@ const getMatriksKpiById = asyncHandler(async (req, res) => {
 });
 
 const updateMatriksKpi = asyncHandler(async (req, res) => {
-  const { id, ...data } = req.body;
+  const id = req.params.id || req.body.id;
+  const { ...data } = req.body;
 
   const validateResult = matriksKpiSchema.partial().safeParse(data);
   if (!validateResult.success) {

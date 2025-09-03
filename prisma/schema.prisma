@@ -69,7 +69,7 @@ model MatriksKPI {
 model PenilaianKPI {
   id           Int               @id @default(autoincrement())
   karyawan     Karyawan          @relation(fields: [karyawanId], references: [id])
-  karyawanId   Int
+  karyawanId   Int               
   bulan        String
   totalSkor    Float?
   dibuatOleh   User              @relation("DibuatOleh", fields: [dibuatOlehId], references: [id])

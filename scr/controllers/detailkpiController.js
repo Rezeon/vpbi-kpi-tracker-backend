@@ -13,7 +13,7 @@ const addDetailKpi = asyncHandler(async (req, res) => {
 
   if (!validateData.success) {
     return res.status(400).json({
-      errors: validateData.error.errors.map((e) => e.message),
+      errors: validateData.error.map((e) => e.message),
     });
   }
 

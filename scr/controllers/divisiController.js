@@ -18,7 +18,18 @@ const addDivisi = asyncHandler(async (req, res) => {
 
 const getAllDivisi = asyncHandler(async (req, res) => {
   const divisi = await prisma.divisi.findMany({
-    include: { karyawan: true, leader: true },
+    include: {
+      karyawan: {
+        include: {
+          penilaian: {
+            select: {
+              id: true
+            }
+          },
+        },
+      },
+      leader: true,
+    },
   });
 
   return res.status(200).json(divisi);
