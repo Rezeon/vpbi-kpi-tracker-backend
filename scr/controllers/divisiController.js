@@ -23,8 +23,14 @@ const getAllDivisi = asyncHandler(async (req, res) => {
         include: {
           penilaian: {
             select: {
-              id: true
-            }
+              id: true,
+            },
+          },
+          matriks: {
+            include: {
+              karyawan: true,
+              detail: true,
+            },
           },
         },
       },
