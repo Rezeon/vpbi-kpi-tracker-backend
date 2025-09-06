@@ -108,6 +108,9 @@ const penilaianKpiSchema = z.object({
   bulan: z
     .string({ required_error: "Bulan wajib diisi" })
     .min(1, { message: "Bulan tidak boleh kosong" }),
+  tahun: z
+    .string({ required_error: "tahun wajib diisi" })
+    .min(1, { message: "tahun tidak boleh kosong" }),
   totalSkor: z
     .number({ invalid_type_error: "Total skor harus berupa angka" })
     .nullable()

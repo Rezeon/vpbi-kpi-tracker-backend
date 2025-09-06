@@ -45,12 +45,12 @@ const getAllPenilaianKpi = asyncHandler(async (req, res) => {
             include: {
               karyawan: {
                 include: {
-                  penilaian: true
-                }
-              }
-            }
-          }
-        }
+                  penilaian: true,
+                },
+              },
+            },
+          },
+        },
       },
       dibuatOleh: true,
       detail: true,
@@ -88,24 +88,37 @@ const updatePenilaianKpi = asyncHandler(async (req, res) => {
       errors: validateResult.error.errors.map((e) => e.message),
     });
   }
+
+  const currentPenilaian = await prisma.penilaianKPI.findUnique({
+    where: { id: Number(id) },
+    select: { bulan: true, tahun: true, karyawanId: true },
+  });
+
+  if (!currentPenilaian) {
+    return res.status(404).json({ error: "Penilaian tidak ditemukan" });
+  }
   const employeScore = await prisma.karyawan.findUnique({
-    where: { id: Number(req.body.karyawanId) },
+    where: { id: currentPenilaian.karyawanId },
     select: {
       matriks: {
+        where: {
+          bulan: currentPenilaian.bulan,
+          tahun: currentPenilaian.tahun,
+        },
         select: {
           detail: {
-            select: {
-              nilai: true,
-            },
+            select: { nilai: true },
           },
         },
       },
     },
   });
+
   const nilaiList = employeScore.matriks.flatMap((m) =>
     m.detail.map((d) => d.nilai)
   );
   const totalPenilaian = nilaiList.reduce((acc, val) => acc + val, 0);
+
   const updated = await prisma.penilaianKPI.update({
     where: { id: Number(id) },
     data: {

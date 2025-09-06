@@ -14,17 +14,17 @@ datasource db {
 }
 
 model User {
-  id          Int            @id @default(autoincrement())
-  clerkId     String         @unique
-  email       String
-  username    String
-  role        Role
-  karyawan    Karyawan?      @relation("UserToKaryawan")
-  karyawanId  Int?           @unique
-  createdAt   DateTime       @default(now())
-  notifikasi  Notifikasi[]
-  penilaian   PenilaianKPI[] @relation("DibuatOleh")
-  divisiLeader Divisi?  @relation("DivisiLeader")
+  id           Int            @id @default(autoincrement())
+  clerkId      String         @unique
+  email        String
+  username     String
+  role         Role
+  karyawan     Karyawan?      @relation("UserToKaryawan")
+  karyawanId   Int?           @unique
+  createdAt    DateTime       @default(now())
+  notifikasi   Notifikasi[]
+  penilaian    PenilaianKPI[] @relation("DibuatOleh")
+  divisiLeader Divisi?        @relation("DivisiLeader")
 }
 
 model Karyawan {
@@ -50,27 +50,30 @@ model Divisi {
   deskripsi String
   createdAt DateTime   @default(now())
   karyawan  Karyawan[]
-  leaderId  Int?      @unique
-  leader    User?     @relation("DivisiLeader", fields: [leaderId], references: [id])
+  leaderId  Int?       @unique
+  leader    User?      @relation("DivisiLeader", fields: [leaderId], references: [id])
 }
 
 model MatriksKPI {
-  id        Int               @id @default(autoincrement())
-  namaKPI   String
-  deskripsi String
-  bobot     Float
-  karyawan   Karyawan    @relation(fields: [karyawanId], references: [id])
+  id         Int               @id @default(autoincrement())
+  namaKPI    String
+  deskripsi  String
+  bulan      String
+  tahun      Int
+  bobot      Float
+  karyawan   Karyawan          @relation(fields: [karyawanId], references: [id])
   karyawanId Int
-  createdAt DateTime          @default(now())
-  detail    DetailPenilaian[]
-  BuktiKPI  BuktiKPI[]
+  createdAt  DateTime          @default(now())
+  detail     DetailPenilaian[]
+  BuktiKPI   BuktiKPI[]
 }
 
 model PenilaianKPI {
   id           Int               @id @default(autoincrement())
   karyawan     Karyawan          @relation(fields: [karyawanId], references: [id])
-  karyawanId   Int               
+  karyawanId   Int
   bulan        String
+  tahun        String
   totalSkor    Float?
   dibuatOleh   User              @relation("DibuatOleh", fields: [dibuatOlehId], references: [id])
   dibuatOlehId Int
@@ -103,13 +106,11 @@ model BuktiKPI {
   matriks    MatriksKPI  @relation(fields: [matriksId], references: [id])
   matriksId  Int
   bulan      String
-  fileUrl    String? 
-  deskripsi  String? 
+  fileUrl    String?
+  deskripsi  String?
   status     StatusBukti @default(draft)
   createdAt  DateTime    @default(now())
 }
-
-
 
 model Notifikasi {
   id        Int         @id @default(autoincrement())
@@ -121,7 +122,6 @@ model Notifikasi {
   status    NotifStatus
   createdAt DateTime    @default(now())
 }
-
 
 enum Role {
   admin
