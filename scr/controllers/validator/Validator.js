@@ -87,12 +87,14 @@ const matriksKpiSchema = z.object({
   namaKPI: z
     .string({ required_error: "Nama KPI wajib diisi" })
     .min(1, { message: "Nama KPI tidak boleh kosong" }),
+
   tahun: z
-    .number({ required_error: "tahun wajib diisi" })
-    .min({ message: "tahun tidak boleh kosong" }),
+    .number({ required_error: "Tahun wajib diisi" })
+    .min(1900, { message: "Tahun tidak boleh kosong" }),
+
   bulan: z
-    .string({ required_error: "bulan wajib diisi" })
-    .min({ message: "bulan tidak boleh kosong" }),
+    .string({ required_error: "Bulan wajib diisi" })
+    .min(1, { message: "Bulan tidak boleh kosong" }),
 
   deskripsi: z
     .string({ required_error: "Deskripsi wajib diisi" })
@@ -101,6 +103,7 @@ const matriksKpiSchema = z.object({
   bobot: z
     .number({ invalid_type_error: "Bobot harus berupa angka" })
     .min(0, { message: "Bobot tidak boleh negatif" }),
+
   karyawanId: z
     .number({ invalid_type_error: "karyawanId harus berupa angka" })
     .int({ message: "karyawanId harus bilangan bulat" }),
