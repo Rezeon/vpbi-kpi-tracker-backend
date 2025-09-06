@@ -89,10 +89,10 @@ const matriksKpiSchema = z.object({
     .min(1, { message: "Nama KPI tidak boleh kosong" }),
   tahun: z
     .number({ required_error: "tahun wajib diisi" })
-    .min(1, { message: "tahun tidak boleh kosong" }),
+    .min({ message: "tahun tidak boleh kosong" }),
   bulan: z
     .string({ required_error: "bulan wajib diisi" })
-    .min(1, { message: "bulan tidak boleh kosong" }),
+    .min({ message: "bulan tidak boleh kosong" }),
 
   deskripsi: z
     .string({ required_error: "Deskripsi wajib diisi" })
