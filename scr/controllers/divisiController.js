@@ -24,6 +24,8 @@ const getAllDivisi = asyncHandler(async (req, res) => {
           penilaian: {
             select: {
               id: true,
+              bulan: true,
+              tahun:true,
               totalSkor: true
             },
           },
