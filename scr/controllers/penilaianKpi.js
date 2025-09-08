@@ -126,6 +126,22 @@ const updatePenilaianKpi = asyncHandler(async (req, res) => {
       ...validateResult.data,
     },
   });
+  const karyawanData = await prisma.karyawan.findUnique({
+    where: { id: Number(req.body.karyawanId) },
+  });
+
+  if (karyawanData) {
+    try {
+      await transporter.sendMail({
+        from: process.env.GOOGLE_APP_ACCOUNT,
+        to: karyawanData.email,
+        subject: "Matrik anda sudah dinilai",
+        html: `<b>Terimakasih atas kerja sama anda ${karyawanData.nama} dengan total Skor ${Number(req.body.totalSkor)}</b>`,
+      });
+    } catch (error) {
+      console.error("Gagal kirim email:", error.message);
+    }
+  }
 
   return res.status(200).json(updated);
 });
