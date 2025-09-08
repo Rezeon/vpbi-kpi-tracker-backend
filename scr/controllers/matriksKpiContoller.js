@@ -1,6 +1,7 @@
 const asyncHandler = require("express-async-handler");
 const prisma = require("../config/prisma");
 const { matriksKpiSchema } = require("./validator/Validator");
+const { transporter } = require("../utils/nodeMailer");
 
 const addMatriksKpi = asyncHandler(async (req, res) => {
   const validateResult = matriksKpiSchema.safeParse(req.body);
@@ -14,6 +15,19 @@ const addMatriksKpi = asyncHandler(async (req, res) => {
   const matriks = await prisma.matriksKPI.create({
     data: validateResult.data,
   });
+  const karyawan = await prisma.karyawan.findUnique({
+    where: { id: Number(req.body.karyawanId) },
+  });
+  try {
+    await transporter.sendMail({
+      from: process.env.GOOGLE_APP_ACCOUNT,
+      to: karyawan.email,
+      subject: `Anda telah mendapatkan matriks/taks baru`,
+      html: `<p>Matrik baru:</p><b>${matriks.namaKPI}</b><span/><p>${matriks.deskripsi}</p><span/><p>matrik ini mempunyai bobot <b>${matriks.bobot}</b></p>`,
+    });
+  } catch (error) {
+    console.error("Gagal kirim email:", error.message);
+  }
 
   return res.status(201).json(matriks);
 });

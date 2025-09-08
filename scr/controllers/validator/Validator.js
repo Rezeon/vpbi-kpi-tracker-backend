@@ -77,6 +77,9 @@ const divisiSchema = z.object({
   nama: z
     .string({ required_error: "Nama divisi wajib diisi" })
     .min(1, { message: "Nama divisi tidak boleh kosong" }),
+  target: z
+    .number({ required_error: "Target divisi wajib diisi" })
+    .min(0, { message: "Target divisi tidak boleh kosong" }),
 
   deskripsi: z
     .string({ required_error: "Deskripsi wajib diisi" })

@@ -49,6 +49,7 @@ model Divisi {
   nama      String
   deskripsi String
   createdAt DateTime   @default(now())
+  target    Int?
   karyawan  Karyawan[]
   leaderId  Int?       @unique
   leader    User?      @relation("DivisiLeader", fields: [leaderId], references: [id])
