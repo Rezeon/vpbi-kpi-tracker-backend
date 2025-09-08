@@ -136,7 +136,7 @@ const updatePenilaianKpi = asyncHandler(async (req, res) => {
         from: process.env.GOOGLE_APP_ACCOUNT,
         to: karyawanData.email,
         subject: "Matrik anda sudah dinilai",
-        html: `<b>Terimakasih atas kerja sama anda ${karyawanData.nama} dengan total Skor ${Number(req.body.totalSkor)}</b>`,
+        html: `<b>Terimakasih atas kerja sama anda ${karyawanData.nama} dengan total Skor ${updated.totalSkor}</b>`,
       });
     } catch (error) {
       console.error("Gagal kirim email:", error.message);
