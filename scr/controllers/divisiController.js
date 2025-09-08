@@ -1,6 +1,7 @@
 const asyncHandler = require("express-async-handler");
 const prisma = require("../config/prisma");
 const { divisiSchema, karyawanSchema } = require("./validator/Validator");
+const { transporter } = require("../utils/nodeMailer");
 
 const addDivisi = asyncHandler(async (req, res) => {
   const validatedData = divisiSchema.safeParse(req.body);
@@ -13,6 +14,19 @@ const addDivisi = asyncHandler(async (req, res) => {
   const divisi = await prisma.divisi.create({
     data: validatedData.data,
   });
+  const karyawan = await prisma.karyawan.findUnique({
+    where: { id: Number(req.body.karyawanId) },
+  });
+  try {
+    await transporter.sendMail({
+      from: process.env.GOOGLE_APP_ACCOUNT,
+      to: karyawan.email,
+      subject: `Semangat`,
+      html: `<p>Selamat anda telah menjadi leader <b>${divisi.nama}</b></p><br /> <p>${divisi.deskripsi}</p>`,
+    });
+  } catch (error) {
+    console.error("Gagal kirim email:", error.message);
+  }
   return res.status(200).json(divisi);
 });
 
@@ -25,8 +39,8 @@ const getAllDivisi = asyncHandler(async (req, res) => {
             select: {
               id: true,
               bulan: true,
-              tahun:true,
-              totalSkor: true
+              tahun: true,
+              totalSkor: true,
             },
           },
           matriks: {
