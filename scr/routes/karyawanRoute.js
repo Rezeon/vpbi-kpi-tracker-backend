@@ -10,7 +10,7 @@ const {
 } = require("../controllers/karyawanController");
 
 router.post("/add", ...leaderProcedure(addKaryawan)); // akses umum
-router.patch("/update", ...leaderProcedure(updateKaryawan));
+router.patch("/update/:id", ...leaderProcedure(updateKaryawan));
 router.get("/all", ...publicProcedure(getAllKaryawan));
 router.get(`/:id`, ...publicProcedure(getKaryawanbyId));
 router.delete("/delete/:id", ...leaderProcedure(deleteKaryawan));
