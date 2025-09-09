@@ -47,6 +47,7 @@ const getMatriksKpiById = asyncHandler(async (req, res) => {
     include: {
       detail: true,
       karyawan: true,
+      BuktiKpi: true
     },
   });
 
