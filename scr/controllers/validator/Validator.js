@@ -175,7 +175,7 @@ const buktiKpiSchema = z.object({
   deskripsi: z
     .string({ required_error: "harus diisi" })
     .min(1, { message: "deskripsi harus diisi" }),
-  status: StatusBuktiEnum,
+  status: StatusBuktiEnum.optional(),
 });
 
 const notifikasiSchema = z.object({
